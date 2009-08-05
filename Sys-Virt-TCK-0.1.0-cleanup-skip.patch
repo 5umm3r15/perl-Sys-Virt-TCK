@@ -1,0 +1,18 @@
+diff -rup Sys-Virt-TCK-0.1.0/lib/Sys/Virt/TCK.pm Sys-Virt-TCK-0.1.0.new/lib/Sys/Virt/TCK.pm
+--- Sys-Virt-TCK-0.1.0/lib/Sys/Virt/TCK.pm	2009-07-22 18:33:55.000000000 +0100
++++ Sys-Virt-TCK-0.1.0.new/lib/Sys/Virt/TCK.pm	2009-08-05 17:22:15.000000000 +0100
+@@ -57,7 +57,13 @@ sub setup {
+ 
+     $self->reset if $self->{autoclean};
+ 
+-    $self->sanity_check;
++    eval {
++	$self->sanity_check;
++    };
++    if ($@) {
++	$self->{conn} = undef;
++	die $@;
++    }
+ 
+     return $self->{conn};
+ }

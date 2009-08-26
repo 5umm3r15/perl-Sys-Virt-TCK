@@ -10,14 +10,17 @@
 Summary: Sys::Virt::TCK - libvirt Technology Compatibility Kit
 Name: perl-%{appname}
 Version: 0.1.0
-Release: 5%{dist}
+Release: 6%{dist}
 License: GPLv2 or Artistic
 Group: Development/Tools
 Source: http://libvirt.org/sources/tck/%{appname}-%{version}.tar.gz
 Patch1: %{appname}-%{version}-cleanup-skip.patch
+Patch2: %{appname}-%{version}-skip-dom0.patch
+Patch3: %{appname}-%{version}-i686-pae-kernels.patch
+Patch4: %{appname}-%{version}-clone-api.patch
 Url: http://libvirt.org/
 BuildRoot: %{_tmppath}/%{appname}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires: libvirt >= 0.6.2
+Requires: libvirt >= 0.6.4
 Requires:  perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 BuildRequires: perl(accessors)
 BuildRequires: perl(App::Prove)
@@ -37,14 +40,18 @@ BuildRequires: perl(TAP::Harness::Archive)
 BuildRequires: perl(Test::Builder)
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Sub::Uplevel)
-BuildRequires: perl(Sys::Virt) >= 0.2.0
+BuildRequires: perl(Sys::Virt) >= 0.2.1
 BuildRequires: perl(XML::Twig)
 BuildRequires: perl(XML::Writer)
 BuildRequires: perl(XML::XPath)
 BuildRequires: perl(Test::Pod)
 BuildRequires: perl(Test::Pod::Coverage)
-# RPM autoprovides mising this
+# RPM autoprovides misses these 3
 Requires: perl(Test::Exception)
+Requires: perl(TAP::Formatter::HTML)
+Requires: perl(TAP::Harness::Archive)
+# Want to force this minimal version, so don't rely on RPM autoprov
+Requires: perl(Sys::Virt) >= 0.2.1
 BuildArchitectures: noarch
 
 %description
@@ -55,6 +62,9 @@ technology.
 %prep
 %setup -q -n %{appname}-%{version}
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 %{__perl} Build.PL installdirs=vendor
@@ -71,9 +81,6 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_fixperms} $RPM_BUILD_ROOT/*
 
 %__install -m 0755 -d $RPM_BUILD_ROOT%{_localstatedir}/cache/libvirt-tck
-
-# Requires newer libvirt perl binding
-rm -f $RPM_BUILD_ROOT/%{_datadir}/libvirt-tck/tests/storage/200-clone-vol-dir.t
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -97,6 +104,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_localstatedir}/cache/libvirt-tck
 
 %changelog
+* Wed Aug 26 2009 Daniel P. Berrange <berrange@redhat.com> - 0.1.0-6
+- Skip over Xen dom0 domains
+- Use PAE kernel for i686 by default so it works with Xen
+- Re-enable cloning test now newer Sys-Virt exists in rawhide
+
 * Wed Aug  5 2009 Daniel P. Berrange <berrange@redhat.com> - 0.1.0-5
 - Add missing perl-Test-Exception dep
 - Skip cleanup if sanity check fails

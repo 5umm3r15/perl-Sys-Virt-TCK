@@ -1,0 +1,21 @@
+diff -rup Sys-Virt-TCK-0.1.0.orig/scripts/storage/200-clone-vol-dir.t Sys-Virt-TCK-0.1.0.new/scripts/storage/200-clone-vol-dir.t
+--- Sys-Virt-TCK-0.1.0.orig/scripts/storage/200-clone-vol-dir.t	2009-07-22 18:33:55.000000000 +0100
++++ Sys-Virt-TCK-0.1.0.new/scripts/storage/200-clone-vol-dir.t	2009-08-26 16:42:01.000000000 +0100
+@@ -102,7 +102,7 @@ foreach my $format (@formats) {
+     my $volclonexml = $tck->generic_volume("test$format", $format, 1024*1024*50)->as_xml;
+ 
+     my $clone;
+-    ok_volume { $clone = $pool->create_volume($volclonexml, $vol) } "clone to $format volume";
++    ok_volume { $clone = $pool->clone_volume($volclonexml, $vol) } "clone to $format volume";
+ 
+     $path = xpath($clone, "string(/volume/target/path)");
+     $st = stat($path);
+@@ -113,7 +113,7 @@ foreach my $format (@formats) {
+     diag "Cloning cloned volume back to raw format";
+     my $voldstxml = $tck->generic_volume("testdst", "raw", 1024*1024*50)->as_xml;
+     my $result;
+-    ok_volume { $result = $pool->create_volume($voldstxml, $clone) } "clone back to raw volume";
++    ok_volume { $result = $pool->clone_volume($voldstxml, $clone) } "clone back to raw volume";
+ 
+ 
+     $path = xpath($result, "string(/volume/target/path)");

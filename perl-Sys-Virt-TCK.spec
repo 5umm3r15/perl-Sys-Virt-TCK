@@ -10,7 +10,7 @@
 Summary: Sys::Virt::TCK - libvirt Technology Compatibility Kit
 Name: perl-%{appname}
 Version: 0.1.0
-Release: 6%{dist}
+Release: 7%{dist}
 License: GPLv2 or Artistic
 Group: Development/Tools
 Source: http://libvirt.org/sources/tck/%{appname}-%{version}.tar.gz
@@ -104,6 +104,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_localstatedir}/cache/libvirt-tck
 
 %changelog
+* Thu May 06 2010 Marcela Maslanova <mmaslano@redhat.com> - 0.1.0-7
+- Mass rebuild with perl-5.12.0
+
 * Wed Aug 26 2009 Daniel P. Berrange <berrange@redhat.com> - 0.1.0-6
 - Skip over Xen dom0 domains
 - Use PAE kernel for i686 by default so it works with Xen

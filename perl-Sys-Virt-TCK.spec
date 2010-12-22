@@ -10,7 +10,7 @@
 Summary: Sys::Virt::TCK - libvirt Technology Compatibility Kit
 Name: perl-%{appname}
 Version: 0.1.0
-Release: 7%{dist}
+Release: 8%{dist}
 License: GPLv2 or Artistic
 Group: Development/Tools
 Source: http://libvirt.org/sources/tck/%{appname}-%{version}.tar.gz
@@ -104,6 +104,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_localstatedir}/cache/libvirt-tck
 
 %changelog
+* Wed Dec 22 2010 Marcela Maslanova <mmaslano@redhat.com> - 0.1.0-8
+- 661697 rebuild for fixing problems with vendorach/lib
+
 * Thu May 06 2010 Marcela Maslanova <mmaslano@redhat.com> - 0.1.0-7
 - Mass rebuild with perl-5.12.0
 

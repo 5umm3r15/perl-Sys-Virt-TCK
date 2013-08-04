@@ -10,7 +10,7 @@
 Summary: Sys::Virt::TCK - libvirt Technology Compatibility Kit
 Name: perl-%{appname}
 Version: 0.1.0
-Release: 15%{dist}
+Release: 16%{dist}
 License: GPLv2 or Artistic
 Group: Development/Tools
 Source: http://libvirt.org/sources/tck/%{appname}-%{version}.tar.gz
@@ -104,6 +104,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_localstatedir}/cache/libvirt-tck
 
 %changelog
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.1.0-16
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Mon Jul 29 2013 Petr Pisar <ppisar@redhat.com> - 0.1.0-15
 - Perl 5.18 rebuild
 

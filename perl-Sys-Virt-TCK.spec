@@ -19,7 +19,6 @@ Patch2: %{appname}-%{version}-skip-dom0.patch
 Patch3: %{appname}-%{version}-i686-pae-kernels.patch
 Patch4: %{appname}-%{version}-clone-api.patch
 Url: http://libvirt.org/
-BuildRoot: %{_tmppath}/%{appname}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: libvirt >= 0.6.4
 Requires:  perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 BuildRequires: perl-generators

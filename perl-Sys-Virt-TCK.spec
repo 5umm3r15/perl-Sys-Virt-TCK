@@ -82,9 +82,6 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 
 %__install -m 0755 -d $RPM_BUILD_ROOT%{_localstatedir}/cache/libvirt-tck
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 
 %files
 %defattr(-,root,root)

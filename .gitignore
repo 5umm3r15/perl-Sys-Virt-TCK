@@ -2,3 +2,4 @@ Sys-Virt-TCK-0.1.0.tar.gz
 .build*.log
 noarch
 *.src.rpm
+/Sys-Virt-TCK-v1.0.0.tar.gz

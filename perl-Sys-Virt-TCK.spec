@@ -5,7 +5,7 @@
 Summary: Sys::Virt::TCK - libvirt Technology Compatibility Kit
 Name: perl-%{appname}
 Version: 1.0.0
-Release: 1%{dist}
+Release: 2%{dist}
 License: GPLv2
 Source: http://libvirt.org/sources/tck/%{appname}-v%{version}.tar.gz
 Url: http://libvirt.org/
@@ -94,6 +94,9 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %dir %{_localstatedir}/cache/libvirt-tck
 
 %changelog
+* Sat Jun 30 2018 Jitka Plesnikova <jplesnik@redhat.com> - 1.0.0-2
+- Perl 5.28 rebuild
+
 * Mon Jun 11 2018 Daniel P. Berrangé <berrange@redhat.com> - 1.0.0-1
 - Update to 1.0.0 release
 

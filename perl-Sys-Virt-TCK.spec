@@ -80,7 +80,6 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %__install -m 0755 -d $RPM_BUILD_ROOT%{_localstatedir}/cache/libvirt-tck
 
 %files
-%defattr(-,root,root)
 %license LICENSE
 %doc README Changes
 %dir %{_sysconfdir}/libvirt-tck

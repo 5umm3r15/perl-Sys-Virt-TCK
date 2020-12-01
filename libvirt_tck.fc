@@ -1,0 +1,3 @@
+/usr/bin/libvirt-tck		--	gen_context(system_u:object_r:libvirt_tck_exec_t,s0)
+
+/usr/share/libvirt-tck(/.*)?		gen_context(system_u:object_r:libvirt_tck_content_t,s0)

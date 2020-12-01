@@ -1,0 +1,114 @@
+
+## <summary>policy for libvirt_tck</summary>
+
+########################################
+## <summary>
+##	Execute libvirt_tck_exec_t in the libvirt_tck domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`libvirt_tck_domtrans',`
+	gen_require(`
+		type libvirt_tck_t, libvirt_tck_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, libvirt_tck_exec_t, libvirt_tck_t)
+')
+
+######################################
+## <summary>
+##	Execute libvirt_tck in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`libvirt_tck_exec',`
+	gen_require(`
+		type libvirt_tck_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, libvirt_tck_exec_t)
+')
+
+######################################
+## <summary>
+##	Execute libvirt_tck in the unconfined role.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`libvirt_tck_unconfined_role',`
+	optional_policy(`
+		gen_require(`
+			role unconfined_r;
+		')
+		role unconfined_r types $1;
+	')
+')
+
+########################################
+# 
+# Libvirt TCK interface compatibility blocks
+#
+# The following definitions ensure compatibility with distribution policy
+# versions that do not contain given interfaces (epel, or older Fedora
+# releases).
+# Each block tests for existence of given interface and defines it if needed.
+#
+
+#######################################
+## <summary>
+##  Get virtd services status
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed to transition.
+##  </summary>
+## </param>
+#
+ifndef(`virtd_service_status',`
+	interface(`virtd_service_status',`
+		gen_require(`
+			type virtd_unit_file_t;
+		')
+
+		allow $1 virtd_unit_file_t:service status;
+	')
+')
+
+########################################
+## <summary>
+##	Allow virt drivers to manage 
+##	libvirt tck files
+##	Backport from RHEL8
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+
+ifndef(`libvirt_tck_filetrans_var_run_t',`
+	interface(`libvirt_tck_filetrans_var_run_t',`
+		gen_require(`
+			type virt_var_run_t;
+		')
+		manage_dirs_pattern($1, virt_var_run_t, virt_var_run_t)
+		manage_files_pattern($1, virt_var_run_t, virt_var_run_t)
+		manage_lnk_files_pattern($1, virt_var_run_t, virt_var_run_t)
+		manage_sock_files_pattern($1, virt_var_run_t, virt_var_run_t)
+		files_tmp_filetrans($1, virt_var_run_t, { file dir lnk_file sock_file})
+	')
+')

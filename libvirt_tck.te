@@ -1,0 +1,126 @@
+
+policy_module(libvirt_tck, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type libvirt_tck_t;
+type libvirt_tck_exec_t;
+init_daemon_domain(libvirt_tck_t, libvirt_tck_exec_t)
+application_domain(libvirt_tck_t, libvirt_tck_exec_t)
+
+domain_type(libvirt_tck_t)
+
+domain_entry_file(libvirt_tck_t, libvirt_tck_exec_t)
+
+files_type(libvirt_tck_t)
+
+type libvirt_tck_content_t;
+files_type(libvirt_tck_content_t)
+
+type libvirt_tck_log_t;
+logging_log_file(libvirt_tck_log_t)
+
+type libvirt_tck_tmp_t;
+files_tmp_file(libvirt_tck_tmp_t)
+
+########################################
+#
+# libvirt_tck local policy
+#
+allow libvirt_tck_t self:cap_userns sys_ptrace;
+allow libvirt_tck_t self:capability { dac_override dac_read_search chown ipc_lock net_raw };
+allow libvirt_tck_t self:fifo_file rw_fifo_file_perms;
+allow libvirt_tck_t self:netlink_netfilter_socket create_socket_perms;
+allow libvirt_tck_t self:netlink_route_socket create_netlink_socket_perms;
+allow libvirt_tck_t self:process { setfscreate setsockcreate };
+allow libvirt_tck_t self:rawip_socket { create getopt };
+allow libvirt_tck_t self:tcp_socket create_socket_perms;
+allow libvirt_tck_t self:udp_socket create_socket_perms;
+allow libvirt_tck_t self:unix_dgram_socket create_socket_perms;
+allow libvirt_tck_t self:unix_stream_socket { connectto create_stream_socket_perms };
+
+manage_dirs_pattern(libvirt_tck_t, libvirt_tck_content_t, libvirt_tck_content_t)
+manage_files_pattern(libvirt_tck_t, libvirt_tck_content_t, libvirt_tck_content_t)
+files_usr_filetrans(libvirt_tck_t, libvirt_tck_content_t, { dir file})
+
+manage_dirs_pattern(libvirt_tck_t, libvirt_tck_log_t, libvirt_tck_log_t)
+manage_files_pattern(libvirt_tck_t, libvirt_tck_log_t, libvirt_tck_log_t)
+logging_log_filetrans(libvirt_tck_t, libvirt_tck_log_t, { file dir })
+
+kernel_read_net_sysctls(libvirt_tck_t)
+kernel_read_network_state(libvirt_tck_t)
+kernel_request_load_module(libvirt_tck_t)
+
+corecmd_exec_bin(libvirt_tck_t)
+corecmd_exec_shell(libvirt_tck_t)
+
+corenet_tcp_connect_http_port(libvirt_tck_t)
+
+dev_getattr_all_blk_files(libvirt_tck_t)
+dev_read_rand(libvirt_tck_t)
+dev_read_sysfs(libvirt_tck_t)
+
+domain_read_all_domains_state(libvirt_tck_t)
+domain_use_interactive_fds(libvirt_tck_t)
+
+files_map_non_security_files(libvirt_tck_t)
+files_read_etc_files(libvirt_tck_t)
+files_read_non_security_files(libvirt_tck_t)
+files_search_all(libvirt_tck_t)
+
+fs_getattr_all_fs(libvirt_tck_t)
+
+application_exec_all(libvirt_tck_t)
+
+auth_read_passwd(libvirt_tck_t)
+
+init_stream_connect(libvirt_tck_t)
+
+miscfiles_read_generic_certs(libvirt_tck_t)
+miscfiles_read_localization(libvirt_tck_t)
+
+sysnet_exec_ifconfig(libvirt_tck_t)
+sysnet_manage_config(libvirt_tck_t)
+
+unconfined_domtrans_to(libvirt_tck_t, libvirt_tck_exec_t)
+
+libvirt_tck_unconfined_role(libvirt_tck_t)
+libvirt_tck_filetrans_var_run_t(libvirt_tck_t)
+
+optional_policy(`
+	dbus_system_bus_client(libvirt_tck_t)
+')
+
+optional_policy(`
+	gnome_create_generic_cache_dir(libvirt_tck_t)
+	gnome_manage_generic_cache_files(libvirt_tck_t)
+	gnome_filetrans_admin_home_content(libvirt_tck_t)
+')
+
+optional_policy(`
+	iptables_exec(libvirt_tck_t)
+	iptables_read_var_run(libvirt_tck_t)
+')
+
+optional_policy(`
+	rpm_manage_db(libvirt_tck_t)
+')
+
+optional_policy(`
+	systemd_machined_stream_connect(libvirt_tck_t)
+')
+
+optional_policy(`
+	userdom_manage_tmp_dirs(libvirt_tck_t)
+	userdom_manage_tmp_sockets(libvirt_tck_t)
+')
+
+optional_policy(`
+	virt_manage_cache(libvirt_tck_t)
+	virt_read_config(libvirt_tck_t)
+	virtd_service_status(libvirt_tck_t)
+	virt_stream_connect(libvirt_tck_t)
+')
